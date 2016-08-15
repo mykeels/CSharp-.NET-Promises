@@ -6,6 +6,9 @@ This code library is my attempt at recreating JavaScript promises, which i have 
 ####What are Promises in Programming?
 Promises are based on deference (is that a word?) which is the ability to defer or delay execution of some code, until some other code has been completed, while still leaving the processor free to do other stuff. In programming, a promise is usually a function, code block, method or code statement that you wish to execute asynchonously. You could then specify what the processor should do if the code executes successfully, or how to manipulate the result of the code, or even what should happen if an error occurs while resolving the promise.
 
+####Updates (Generics)
+C# Promises is now makes use of Generics! Hooray! Now, you can predict/specify the returned promise value type, unlike previously when dynamic typing was our only hope.
+
 ####The Promise Class
 This is perhaps the most basic Promise class you'll find. It consists of attributes such as:
 
@@ -29,8 +32,9 @@ This is perhaps the most basic Promise class you'll find. It consists of attribu
 
 Perhaps the easiest way to create a Promise is:
 ```
-  Promise.Create(() => {
+  Promise<bool>.Create(() => {
     //Enter Code Here
+    return true;
   });
 ```
 
@@ -45,12 +49,12 @@ Another way to do this is to Promisify your Methods
   //the above method becomes
   
   int AddAsync (int x, int y) {
-    return new Promise(() => add(x, y));
+    return new Promise<int>(() => add(x, y));
   }
   
   //this could now be used as
   
-  AddAsync(12345, 54321).Success((result) => {
+  AddAsync(12345, 54321).Success((int result) => {
     Console.WriteLine(result);
   });
 ```
@@ -60,18 +64,49 @@ Another way to do this is to Promisify your Methods
 The Public Methods in the Promise Class all return the Promise Object, so you can chain Methods, such as 
 
 ```
-Promise.Create(() => {
-  Api.Get("http://www.google.com.ng");
-}).Success((htmlresult) => {
+Promise<string>.Create(() => {
+  return Api.Get("https://www.google.com.ng");
+}).Success((string htmlresult) => {
   Console.WriteLine(htmlresult);
-}).Then((result) => {
+}).Then((string result) => {
   result += "<p>Hello World</p>";
-}).Then((result) => {
+}).Then((string result) => {
   result += "<p>My name is Michael</p>";
-}).Error((ex) => {
+}).Error((Exception ex) => {
   Debug.WriteLine(ex.Message);
   throw ex;
 }).Done(() => {
   Console.WriteLine("GET from Google.com is completed");
 });
 ```
+
+####C# Promise Methods
+
+Its methods include:
+####
+
+**Promise(Func<T>)** A constructor that takes a function/delegate as an argument. The function argument needs to return the type passed into the Promise.
+```
+  Promise<int[]> promise = new Promise<int[]>(() => getPrimeNumbers(1500));
+```
+
+**Promise<T>.Create(Func<T>)** A static method that returns a new Promise (wanna call it a factory method? feel free!)
+
+**Wait()** Do you want to wait for the Promise to execute synchronously? We got you covered.
+
+**Success(Action<T>)** A method that takes in the function to be executed if the Promise resolved successfully. It stores this in the success Action variable
+
+**Then(Action<T>)** A method that takes in a function to be executed aftet the Success function is executed. You can chain multiple Then Functions and have then execute in order. It adds the function argument to the action variable
+
+**Done(Action<T>)** A method that takes in a function to be executed last regardless of the outcome of the Promise. Whether a Promise is successful or fails, the function argument will execute if specified
+
+**Error(Action<Exception>>)** A method that takes in a function argument to be executed in the event of an error while resolving the promise
+
+**SetTimeOut(int)** Lets you specify a timeout in milliseconds to delay the Promise before execution
+
+####C# Promise State
+The state of a C# Promise can be any of the following:
+
+- Pending
+- Fulfilled
+- Rejected
