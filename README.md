@@ -1,7 +1,9 @@
 # CSharp-.NET-Promises
-If you have used promised in JavaScript, then you probably know how awesomely efficient they are making code beautiful, while still gracefully executing operations that usually take a long
+If you have used promised in JavaScript, then you probably know how awesomely efficient they are making code beautiful, while still gracefully executing operations that usually take a long time.
 
-This code library is my attempt at recreating JavaScript promises, which i have come to love and enjoy in Microsoft .NET
+This code library is my attempt at recreating JavaScript promises, which i have come to love and enjoy while using javascript, in Microsoft .NET
+
+Here's what I've come up with:
 
 ####What are Promises in Programming?
 Promises are based on deference (is that a word?) which is the ability to defer or delay execution of some code, until some other code has been completed, while still leaving the processor free to do other stuff. In programming, a promise is usually a function, code block, method or code statement that you wish to execute asynchonously. You could then specify what the processor should do if the code executes successfully, or how to manipulate the result of the code, or even what should happen if an error occurs while resolving the promise.
@@ -110,3 +112,6 @@ The state of a C# Promise can be any of the following:
 - Pending
 - Fulfilled
 - Rejected
+
+####Wait, But Why?
+Why do I need this? C# already takes care of asynchronous programming using its async ... await statements. For Me, it's a bit frustrating to have to use different coding patterns just because i'm writing code on different platforms. One code pattern to rule them all. For asynchronous programming, JavaScript's promises rock! Other Languages already have started implementing Promises. It's only right that .NET should have it too.
